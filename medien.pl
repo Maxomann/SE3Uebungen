@@ -75,3 +75,12 @@ verkauft(34567,2017,21,39).
 verkauft(34567,2018,21,45).
 verkauft(34568,2017,3,23).
 verkauft(34568,2018,3,2).
+
+% Änderungen ab hier
+
+verkauft(1,1,1,1).
+verkauft(1,2,2,1).
+
+preisErhoeht(ResultSortedList) :- findall(Id, (verkauft(Id,Jahr,P1,_), verkauft(Id,Jahr2,P2,_), P2>P1, Jahr2 =:= Jahr + 1), L), sort(L, ResultSortedList).
+
+erstmalsImKatalogAngeboten(Id, ErstmalsAngeboten) :- verkauft(Id, ErstmalsAngeboten, _, _), verkauft(Id, Jahr, _, _), ErstmalsAngeboten < Jahr.
