@@ -16,6 +16,8 @@ produkt(23458,ebuch,blutrache,wolf_michael,meister,2015,1).
 produkt(34567,hoerbuch,hoffnung,sand_molly,audio,2016,51).
 produkt(34568,hoerbuch,winterzeit,wolf_michael,audio,2017,16).
 
+produkt(1,buch,a,b,c,2010,9999999).
+
 % verkauft(PId,Jahr,Preis,Anzahl).
 verkauft(12345,2010,24,391).
 verkauft(12345,2011,24,129).
@@ -78,9 +80,13 @@ verkauft(34568,2018,3,2).
 
 % Änderungen ab hier
 
-verkauft(1,1,1,1).
-verkauft(1,2,2,1).
+
+
+verkauft(1,2000,1,1).
+verkauft(1,2001,1,1).
 
 preisErhoeht(ResultSortedList) :- findall(Id, (verkauft(Id,Jahr,P1,_), verkauft(Id,Jahr2,P2,_), P2>P1, Jahr2 =:= Jahr + 1), L), sort(L, ResultSortedList).
 
 erstmalsImKatalogAngeboten(Id, ErstmalsAngeboten) :- verkauft(Id, ErstmalsAngeboten, _, _), verkauft(Id, Jahr, _, _), ErstmalsAngeboten < Jahr.
+
+ladenhueter(BuchId, Jahr) :- verkauft(BuchId, Jahr2, _, _), Jahr2 >= Jahr-1, produkt(BuchId,_,_,_,_,_,Lagerbestand), verkauft(BuchId, Vorjahr, _, AnzahlVerkauftLetztesJahr), Vorjahr =:= Jahr-1, Lagerbestand > AnzahlVerkauftLetztesJahr*2.
