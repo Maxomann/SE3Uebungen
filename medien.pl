@@ -87,6 +87,6 @@ verkauft(1,2001,1,1).
 
 preisErhoeht(ResultSortedList) :- findall(Id, (verkauft(Id,Jahr,P1,_), verkauft(Id,Jahr2,P2,_), P2>P1, Jahr2 =:= Jahr + 1), L), sort(L, ResultSortedList).
 
-erstmalsImKatalogAngeboten(Id, ErstmalsAngeboten) :- verkauft(Id, ErstmalsAngeboten, _, _), verkauft(Id, Jahr, _, _), ErstmalsAngeboten < Jahr.
+erstmalsImKatalogAngeboten(Id, ErstmalsAngeboten) :- verkauft(Id, ErstmalsAngeboten, _, _), not((verkauft(Id, Jahr, _, _), Jahr < ErstmalsAngeboten)).
 
 ladenhueter(BuchId, Jahr) :- verkauft(BuchId, Jahr2, _, _), Jahr2 >= Jahr-1, produkt(BuchId,_,_,_,_,_,Lagerbestand), verkauft(BuchId, Vorjahr, _, AnzahlVerkauftLetztesJahr), Vorjahr =:= Jahr-1, Lagerbestand > AnzahlVerkauftLetztesJahr*2.
