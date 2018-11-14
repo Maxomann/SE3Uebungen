@@ -25,3 +25,14 @@ vater_von( johannes , klaus ).
 vater_von( johannes , andrea).
 vater_von( walter , barbara ).
 vater_von( walter , magdalena ).
+
+vater_von(a, b).
+vater_von(b, c).
+vater_von(c, d).
+vater_von(d, e).
+
+kind_von( E, K ) :- vater_von(E, K); mutter_von(E, K).
+enkelkind_von( E, EK ) :- kind_von(E, X), kind_von(X, EK).
+
+nachfahre_von(X,Y) :- kind_von(X,Y).
+nachfahre_von(X,Z) :- kind_von(X,Y), nachfahre_von(Y, Z). 
