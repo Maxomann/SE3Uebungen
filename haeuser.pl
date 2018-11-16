@@ -18,3 +18,20 @@ bew(2,3,schulze,schneider,260000,19881213).
 bew(3,3,schneider,mueller,315000,20011201).
 bew(4,5,bund,piepenbrink,1500000,19980601).
 
+bew(5,6,a,b,1500000,19980601).
+bew(6,6,b,c,1500000,19980601).
+bew(7,6,c,d,1500000,19980601).
+bew(8,6,d,e,1500000,19980601).
+bew(9,6,e,f,1500000,19980601).
+
+neueigentuemer(Eigentuemer, Strasse, Hausnummer) :-
+    obj(Objektnummer, _, Strasse, Hausnummer, _),
+    bew(_,Objektnummer, _, Eigentuemer, _, Kaufdatum),
+    not((bew(_, Objektnummer, _, _, _, Verkaufsdatum), Verkaufsdatum > Kaufdatum)). 
+
+vorbesitzer(ObjektId, Besitzer, Vorbesitzer) :-
+    bew(_, ObjektId, Vorbesitzer, Besitzer, _, _).
+
+vorbesitzer(ObjektId, Besitzer, VorVorbesitzer) :-
+    vorbesitzer(ObjektId, Besitzer, Vorbesitzer),
+    vorbesitzer(ObjektId, Vorbesitzer, VorVorbesitzer).
