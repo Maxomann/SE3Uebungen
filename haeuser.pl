@@ -19,19 +19,23 @@ bew(3,3,schneider,mueller,315000,20011201).
 bew(4,5,bund,piepenbrink,1500000,19980601).
 
 bew(5,6,a,b,1500000,19980601).
-bew(6,6,b,c,1500000,19980601).
-bew(7,6,c,d,1500000,19980601).
-bew(8,6,d,e,1500000,19980601).
-bew(9,6,e,f,1500000,19980601).
+bew(6,6,b,c,1500000,19980602).
+bew(7,6,c,d,1500000,19980603).
+bew(8,6,d,e,1500000,19980604).
+bew(9,6,e,f,1500000,19980605).
+bew(10,6,f,a,1500000,19980606).
 
 neueigentuemer(Eigentuemer, Strasse, Hausnummer) :-
     obj(Objektnummer, _, Strasse, Hausnummer, _),
     bew(_,Objektnummer, _, Eigentuemer, _, Kaufdatum),
     not((bew(_, Objektnummer, _, _, _, Verkaufsdatum), Verkaufsdatum > Kaufdatum)). 
 
-vorbesitzer(ObjektId, Besitzer, Vorbesitzer) :-
+vorbesitzerA(ObjektId, Besitzer, Vorbesitzer) :-
+    bew(_, ObjektId, _, Vorbesitzer, _, _), Vorbesitzer \= Besitzer.
+
+vorbesitzerB(ObjektId, Besitzer, Vorbesitzer) :-
     bew(_, ObjektId, Vorbesitzer, Besitzer, _, _).
 
-vorbesitzer(ObjektId, Besitzer, VorVorbesitzer) :-
-    vorbesitzer(ObjektId, Besitzer, Vorbesitzer),
-    vorbesitzer(ObjektId, Vorbesitzer, VorVorbesitzer).
+vorbesitzerB(ObjektId, Besitzer, VorVorbesitzer) :-
+    vorbesitzerB(ObjektId, Besitzer, Vorbesitzer),
+    vorbesitzerB(ObjektId, Vorbesitzer, VorVorbesitzer).
