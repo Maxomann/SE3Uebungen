@@ -52,3 +52,17 @@ arbeitsschritt(box0817,1,montage3,galaxy2004).
 arbeitsschritt(k_squeezer,2,montage3,galaxy2004).
 arbeitsschritt(hyper_squeezer,4,montage3,galaxy2004).
 
+% Eigene Prädikate
+voraussetzung(Produkt1, Produkt2) :- arbeitsschritt(Produkt1, _, _, Produkt2).
+voraussetzung(Produkt1, Produkt3) :- arbeitsschritt(Produkt1, _, _, Produkt2), voraussetzung(Produkt2, Produkt3).
+
+betroffenVonLieferausfall(Produkt, Betroffen) :- voraussetzung(Produkt, Betroffen).
+
+voraussetzungErweitert(Produkt1, Maschiene, Produkt2) :-    arbeitsschritt(Produkt1, _, MaschieneAusSchritt, Produkt2), not(MaschieneAusSchritt = Maschiene).
+voraussetzungErweitert(Produkt1, Maschiene, Produkt3) :-    arbeitsschritt(Produkt1, _, MaschieneAusSchritt, Produkt2),
+                                                            voraussetzungErweitert(Produkt2, Maschiene, Produkt3),
+                                                            not(MaschieneAusSchritt = Maschiene).
+
+%a(Maschiene, Produkt) :- endprodukt(Produkt), voraussetzung(ProduktVor, Produkt), not(voraussetzungErweitert(ProduktVor, Maschiene, Produkt)).
+
+betroffenVonMaschienenausfall(Maschiene, ProdukteSorted) :- findall(Produkt, (endprodukt(Produkt), voraussetzung(ProduktVor, Produkt), not(voraussetzungErweitert(ProduktVor, Maschiene, Produkt))), Produkte), sort(Produkte, ProdukteSorted).
