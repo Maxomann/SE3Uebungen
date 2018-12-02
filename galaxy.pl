@@ -66,3 +66,17 @@ voraussetzungErweitert(Produkt1, Maschiene, Produkt3) :-    arbeitsschritt(Produ
 %a(Maschiene, Produkt) :- endprodukt(Produkt), voraussetzung(ProduktVor, Produkt), not(voraussetzungErweitert(ProduktVor, Maschiene, Produkt)).
 
 betroffenVonMaschienenausfall(Maschiene, ProdukteSorted) :- findall(Produkt, (endprodukt(Produkt), voraussetzung(ProduktVor, Produkt), not(voraussetzungErweitert(ProduktVor, Maschiene, Produkt))), Produkte), sort(Produkte, ProdukteSorted).
+
+
+tiefe(Zulieferteil, Tiefe, Endteil) :- arbeitsschritt(Zulieferteil, _, _, Endteil), Tiefe = 1.
+tiefe(Zulieferteil, Tiefe, Endteil) :-
+    (arbeitsschritt(Zulieferteil, _, _, Zwischenteil), tiefe(Zwischenteil, Tiefe2, Endteil), Tiefe is Tiefe2 + 1),
+    not((tiefe(Zulieferteil, Tiefe2, Endteil), Tiefe2 > Tiefe)).% Sicherstellen, dass es keinen Andren Pfad mit größerer Tiefe gibt.
+
+
+%false. bedeutet, dass das gegebene Zulieferteil nicht verwendet wird um das Endteil zu erzeugen
+anzahlZuliefererTeile(Zulieferteil, Anzahl, Endteil) :- arbeitsschritt(Zulieferteil, Anzahl, _, Endteil).
+anzahlZuliefererTeile(Zulieferteil, Anzahl, Endteil2) :- arbeitsschritt(Zulieferteil, Anzahl1, _, Zwischenteil), anzahlZuliefererTeile(Zwischenteil, Anzahl2, Endteil2), Anzahl is Anzahl1 * Anzahl2.
+
+%maxAnzahlEndprodukte(Zulieferteil, GegebeneAnzahl, MaxZielAnzahl, Endteil) :- arbeitsschritt(Zulieferteil, Anzahl, _, Endteil), MaxZielAnzahl is floor(GegebeneAnzahl / Anzahl).
+maxAnzahlEndprodukte(Zulieferteil, GegebeneAnzahl, MaxZielAnzahl, Endteil) :- anzahlZuliefererTeile(Zulieferteil, Anzahl, Endteil), MaxZielAnzahl is floor(GegebeneAnzahl / Anzahl).
