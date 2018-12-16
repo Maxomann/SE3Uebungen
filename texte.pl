@@ -72,4 +72,26 @@ text(11,
 
 
 
+% intree(+Element,+BaumAlt,?BaumNeu)
+intree(E,end,t(E,end,end)).
+intree(E,t(S,VB,HB),t(S,VBN,HB)):
+  E@=<S, intree(E,VB,VBN).
+intree(E,t(S,VB,HB),t(S,VB,HBN)):
+  E@>S, intree(E,HB,HBN).
+
+% tree2list(+Baum,?Liste)
+tree2list(end,[ ]).
+tree2list(t(E,VB,HB),L):
+  tree2list(VB,VL), tree2list(HB,HL), append(VL,[E|HL],L).
+
+% list2tree(+Liste,?Baum)
+list2tree([ ],end).
+list2tree([E|R],t(E,VB,HB)):
+  split(R,E,VL,HL), list2tree(VL,VB), list2tree(HL,HB).
+
+% intree_neu(+Element,+ListeAlt,?ListeNeu)
+intree_neu(Element, ListeAlt, ListeNeu):
+  list2tree(ListeAlt, TreeAlt),
+  intree(Element, TreeAlt, TreeNeu),
+  tree2list(TreeNeu, ListeNeu).
 
