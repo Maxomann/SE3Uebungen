@@ -11,7 +11,7 @@ draw(Size) :-
 
    % draw the object on the display
    (
-        draw_object(Display,Size,Size /* , ***add additional parameters if needed *** */);
+        draw_object(Display,Size,Size,15);
         true
    ),
    % if desired save the display as .jpg
@@ -29,24 +29,30 @@ draw(Size) :-
    !.
 
 
-% draw_object(Display,Size,CurrentSize,*** add additional parameters here, if needed ***)
+% draw_object(Display,Size,CurrentSize,IterationCounter)
 % draws a gradient graphics of size Size into Display
 % CurrentSize is decreased recursively fom Size to 0
-draw_object(_,_,0 /* , *** add additional parameters here, if needed *** */). 
-draw_object(Name,Size,CSize /* , *** add additional parameters here, if needed *** */) :- 
+draw_object(_,_,0,_). 
+draw_object(Name,Size,CSize,IterationCounter) :- 
    CSize > 0 ,        % only for positive integers
 
   % *** insert the computation of graphical parameters here ***
 
   % *** create and draw the current graphical object here ***
-
+	new(@box, circle(50)),
+	send(Name, display, @box, point(10,10)),
+	send(@box, fill_pattern, colour(red)),
+	
+	
   % *** send all additional parameters to the current graphical object ***
 
   % decrement CurrentSize and call draw_object recursively
   CSizeNew is CSize - 2,
+  
+  IterationCounterNew is IterationCounter + 1,
 
-% writeln(CSizeNew),
-  draw_object(Name,Size,CSizeNew).
+  writeln(IterationCounter),
+  draw_object(Name,Size,CSizeNew,IterationCounterNew).
 
 
 
